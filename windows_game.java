@@ -1,5 +1,5 @@
 import javax.swing.*;
-
+//หน้าต่างเกมหลัก สร้าง BouncingMeteorite และ GameThread แล้วเริ่ม Thread ต่าง ๆ
 public class windows_game extends JFrame {
     private BouncingMeteorite panel;
     private GameThread gameThread;

@@ -1,10 +1,9 @@
 import java.awt.*;
-import java.awt.image.BufferedImage;
 
 public class Meteorite implements Runnable {
     double x, y;
     double xSpeed, ySpeed;
-    BufferedImage image;
+    Image image;
 
     boolean isExploding = false;
     boolean isDead = false;
@@ -12,12 +11,12 @@ public class Meteorite implements Runnable {
 
     private int meteoriteWidth;
     private int meteoriteHeight;
-    private BufferedImage explosionImage;
+    private Image explosionImage;
     private BouncingMeteorite panel;
     private Thread thread;
 
     // คอนสตรักเตอร์: กำหนดค่าเริ่มต้นพิกัด ความเร็ว รูปภาพ และพาเนลเกมสำหรับอุกกาบาต
-    public Meteorite(double x, double y, double xSpeed, double ySpeed, BufferedImage image, int meteoriteWidth, int meteoriteHeight, BufferedImage explosionImage, BouncingMeteorite panel) {
+    public Meteorite(double x, double y, double xSpeed, double ySpeed, Image image, int meteoriteWidth, int meteoriteHeight, Image explosionImage, BouncingMeteorite panel) {
         this.x = x;
         this.y = y;
         this.xSpeed = xSpeed;
@@ -107,7 +106,7 @@ public class Meteorite implements Runnable {
 
     // เมธอดวาดอุกกาบาต: วาดรูประเบิดหรือรูปอุกกาบาตปกติลงบนหน้าจอ
     public void draw(Graphics g) {
-        BufferedImage currentImg;
+        Image currentImg;
         if (isExploding) {
             currentImg = explosionImage;
         } else {

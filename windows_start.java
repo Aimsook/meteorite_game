@@ -1,7 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-
+//หน้าจอเริ่มเกม ให้ผู้ใช้กรอกจำนวนอุกกาบาต แล้วกด Start เพื่อเริ่มเกม
 public class windows_start extends JFrame implements ActionListener {
     JTextField textField;
     JButton buttonStart;
@@ -103,10 +103,10 @@ public class windows_start extends JFrame implements ActionListener {
 
     // เมธอดจัดการเหตุการณ์เมื่อมีการกดปุ่ม Start ตรวจสอบความถูกต้องของตัวเลขและเริ่มเกม
     public void actionPerformed(ActionEvent e) {
-        int count = 0;
+        int numMeteorites = 0;
         try {
-            count = Integer.parseInt(textField.getText());
-            if (count <= 0) {
+            numMeteorites = Integer.parseInt(textField.getText());
+            if (numMeteorites <= 0) {
                 JOptionPane.showMessageDialog(this, "Please enter a positive integer.", "Invalid Input", JOptionPane.ERROR_MESSAGE);
                 return;
             }
@@ -118,6 +118,6 @@ public class windows_start extends JFrame implements ActionListener {
         // ปิดหน้าต่างเริ่มต้น
         this.dispose();
         // เปิดหน้าต่างเกมหลักพร้อมส่งจำนวนอุกกาบาตเข้าไป
-        new windows_game(count);
+        new windows_game(numMeteorites);
     }
 }

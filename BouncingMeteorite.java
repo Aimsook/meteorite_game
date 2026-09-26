@@ -1,9 +1,6 @@
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -14,8 +11,8 @@ public class BouncingMeteorite extends JPanel {
     private int Meteorite_WIDTH = 80;
     private int Meteorite_HEIGHT = 80;
 
-    private BufferedImage[] IMAGES = loadImages();
-    private static BufferedImage EXPLOSION_IMAGE = loadExplosionImage();
+    private Image[] IMAGES = loadImages();
+    private static Image EXPLOSION_IMAGE = loadExplosionImage();
 
     private List<Meteorite> meteorites = new ArrayList<>();
 
@@ -45,7 +42,7 @@ public class BouncingMeteorite extends JPanel {
                 ySpeed = -ySpeed;
             }
 
-            BufferedImage image = IMAGES[rand.nextInt(IMAGES.length)];
+            Image image = IMAGES[rand.nextInt(IMAGES.length)];
             meteorites.add(new Meteorite(x, y, xSpeed, ySpeed, image, Meteorite_WIDTH, Meteorite_HEIGHT, EXPLOSION_IMAGE, this));
         }
     }
@@ -59,26 +56,19 @@ public class BouncingMeteorite extends JPanel {
     }
 
     // เมธอดโหลดรูปภาพ: โหลดไฟล์รูปภาพอุกกาบาต 5 แบบจากโฟลเดอร์ texture
-    private static BufferedImage[] loadImages() {
-        BufferedImage[] images = new BufferedImage[5];
+    private static Image[] loadImages() {
+        Image[] images = new Image[5];
         for (int i = 0; i < 5; i++) {
-            String path = "texture/meteorite_" + (i + 1) + ".png";
-            try {
-                images[i] = ImageIO.read(new File(path));
-            } catch (IOException e) {
-                throw new RuntimeException("เกิดข้อผิดพลาดร้ายแรง: ไม่สามารถโหลดรูปภาพ " + path, e);
-            }
+            images[i] = Toolkit.getDefaultToolkit().createImage(System.getProperty("user.dir") + 
+                        File.separator + "texture"+  File.separator + "meteorite_" + (i + 1) + ".png");
         }
         return images;
     }
 
     // เมธอดโหลดรูปภาพ: โหลดไฟล์รูปภาพเอฟเฟกต์ระเบิด
-    private static BufferedImage loadExplosionImage() {
-        try {
-            return ImageIO.read(new File("texture/explosion.png"));
-        } catch (IOException e) {
-            throw new RuntimeException("เกิดข้อผิดพลาดร้ายแรง: ไม่สามารถโหลดรูปภาพ explosion.png", e);
-        }
+    private static Image loadExplosionImage() {
+        return Toolkit.getDefaultToolkit().createImage(System.getProperty("user.dir") + 
+               File.separator + "texture"+  File.separator + "explosion.png");
     }
 
     // เมธอดตรวจสอบการชน: ลบลูกที่ตายแล้ว และเช็คการชนกันระหว่างอุกกาบาตแต่ละคู่

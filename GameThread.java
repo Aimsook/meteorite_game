@@ -1,3 +1,4 @@
+//Thread หลักของเกม ทำงานวนตรวจ collision และ repaint() ทุกประมาณ 16 ms
 public class GameThread implements Runnable {
     private BouncingMeteorite panel;
     private Thread thread;
