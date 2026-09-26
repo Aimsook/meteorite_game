@@ -19,6 +19,7 @@ public class BouncingMeteorite extends JPanel {
 
     private List<Meteorite> meteorites = new ArrayList<>();
 
+    // คอนสตรักเตอร์: ตั้งค่าหน้าจอและสร้างอุกกาบาตตามจำนวนที่ผู้ใช้กำหนด พร้อมสุ่มตำแหน่งและความเร็ว
     public BouncingMeteorite(int numMeteorites) {
         this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
         this.setBackground(Color.BLACK);
@@ -49,12 +50,15 @@ public class BouncingMeteorite extends JPanel {
         }
     }
 
+    // เมธอดสั่งทำงาน: เรียกให้อุกกาบาตแต่ละลูกเริ่มต้น Thread ของตัวเอง
     public void startAllThreads() {
-        for (Meteorite m : meteorites) {
+        for (int i = 0; i < meteorites.size(); i++) {
+            Meteorite m = meteorites.get(i);
             m.startThread();
         }
     }
 
+    // เมธอดโหลดรูปภาพ: โหลดไฟล์รูปภาพอุกกาบาต 5 แบบจากโฟลเดอร์ texture
     private static BufferedImage[] loadImages() {
         BufferedImage[] images = new BufferedImage[5];
         for (int i = 0; i < 5; i++) {
@@ -68,6 +72,7 @@ public class BouncingMeteorite extends JPanel {
         return images;
     }
 
+    // เมธอดโหลดรูปภาพ: โหลดไฟล์รูปภาพเอฟเฟกต์ระเบิด
     private static BufferedImage loadExplosionImage() {
         try {
             return ImageIO.read(new File("texture/explosion.png"));
@@ -76,14 +81,21 @@ public class BouncingMeteorite extends JPanel {
         }
     }
 
+    // เมธอดตรวจสอบการชน: ลบลูกที่ตายแล้ว และเช็คการชนกันระหว่างอุกกาบาตแต่ละคู่
     public void checkCollisions() {
-        meteorites.removeIf(m -> m.isDead);
+        for (int i = meteorites.size() - 1; i >= 0; i--) {
+            Meteorite m = meteorites.get(i);
+            if (m.isDead) {
+                meteorites.remove(i);
+            }
+        }
 
         for (int i = 0; i < meteorites.size(); i++) {
             for (int j = i + 1; j < meteorites.size(); j++) {
                 Meteorite m1 = meteorites.get(i);
                 Meteorite m2 = meteorites.get(j);
 
+                // ข้ามการเช็คถ้าลูกใดลูกหนึ่งกำลังระเบิดอยู่
                 if (m1.isExploding || m2.isExploding) {
                     continue;
                 }
@@ -95,6 +107,7 @@ public class BouncingMeteorite extends JPanel {
         }
     }
 
+    // เมธอดตรวจสอบกรอบการชน: เช็คว่าภาพอุกกาบาต 2 ลูกซ้อนทับกันหรือไม่
     private boolean checkCollision(Meteorite m1, Meteorite m2) {
         return m1.x < m2.x + Meteorite_WIDTH &&
             m1.x + Meteorite_WIDTH > m2.x &&
@@ -102,6 +115,7 @@ public class BouncingMeteorite extends JPanel {
             m1.y + Meteorite_HEIGHT > m2.y;
     }
 
+    // เมธอดจัดการเมื่อชนกัน: เปรียบเทียบความเร็วรวม ลูกที่ช้ากว่าจะถูกทำให้ระเบิด
     private void resolveCollision(Meteorite m1, Meteorite m2) {
         double tempXSpeed = m1.xSpeed;
         double tempYSpeed = m1.ySpeed;
@@ -109,6 +123,7 @@ public class BouncingMeteorite extends JPanel {
         double m2tempXSpeed = m2.xSpeed;
         double m2tempYSpeed = m2.ySpeed;
 
+        // แปลงความเร็วให้เป็นค่าบวก (Absolute Value)
         if (tempXSpeed < 0) {
             tempXSpeed = -tempXSpeed;
         }
@@ -125,6 +140,7 @@ public class BouncingMeteorite extends JPanel {
         double m1_real_speed = tempXSpeed + tempYSpeed;
         double m2_real_speed = m2tempXSpeed + m2tempYSpeed;
 
+        // ลูกที่ช้ากว่าจะระเบิด
         if (m1_real_speed > m2_real_speed) {
             m2.explode();
         } else if (m1_real_speed < m2_real_speed) {
@@ -132,6 +148,7 @@ public class BouncingMeteorite extends JPanel {
         }
     }
 
+    // เมธอดวาดหน้าจอ: เคลียร์หน้าจอและสั่งให้อุกกาบาตทุกลูกวาดตัวเอง
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);

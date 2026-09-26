@@ -3,10 +3,12 @@ public class GameThread implements Runnable {
     private Thread thread;
     private boolean running = false;
 
+    // คอนสตรักเตอร์: กำหนดค่าอ้างอิงไปยังพาเนลเกม (BouncingMeteorite)
     public GameThread(BouncingMeteorite panel) {
         this.panel = panel;
     }
 
+    // เมธอดสำหรับเริ่มการทำงานของ Thread หลักของเกม
     public void start() {
         if (thread == null) {
             running = true;
@@ -15,6 +17,7 @@ public class GameThread implements Runnable {
         }
     }
 
+    // เมธอดทำงานของ Thread: ลูปตรวจสอบการชนและสั่งวาดหน้าจอใหม่ทุกๆ 16 มิลลิวินาที
     @Override
     public void run() {
         while (running) {

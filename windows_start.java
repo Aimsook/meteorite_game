@@ -2,16 +2,17 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class windows_start extends JFrame implements ActionListener{
+public class windows_start extends JFrame implements ActionListener {
     JTextField textField;
     JButton buttonStart;
+
+    // คอนสตรักเตอร์: สร้างหน้าต่างเริ่มต้นเกม ประกอบ UI (ปุ่ม, ช่องข้อความ) เข้าด้วยกัน
     public windows_start() {
         JPanel panelBackground = createPanelBackground();
         JPanel centerContentPanel = createPanelContent();
         JLabel labelTitle = createLabelTitle();
         textField = createTextField();
         buttonStart = createButtonStart();
-        JButton buttonStart = createButtonStart();
 
         setTitle("Meteorite Game");
         setSize(350, 400);
@@ -35,23 +36,23 @@ public class windows_start extends JFrame implements ActionListener{
         setVisible(true);
     }
 
-    private JPanel createPanelBackground() 
-    {
+    // เมธอดสำหรับสร้างพาเนลพื้นหลังสีดำ
+    private JPanel createPanelBackground() {
         JPanel panelProgramPanel = new JPanel();
         panelProgramPanel.setBackground(Color.BLACK);
         return panelProgramPanel;
     }
 
-    private JPanel createPanelContent() 
-    {
+    // เมธอดสำหรับสร้างพาเนลจัดเรียงเนื้อหา UI แนวตั้งตรงกลาง
+    private JPanel createPanelContent() {
         JPanel panelContent = new JPanel();
         panelContent.setBackground(Color.BLACK);
         panelContent.setLayout(new BoxLayout(panelContent, BoxLayout.Y_AXIS));
         return panelContent;
     }
 
-    private JLabel createLabelTitle() 
-    {
+    // เมธอดสำหรับสร้างข้อความหัวข้อเกม
+    private JLabel createLabelTitle() {
         JLabel labelTitle = new JLabel("How many meteorites do you want?");
         labelTitle.setForeground(Color.WHITE);
         labelTitle.setFont(new Font("Tahoma", Font.PLAIN, 18));
@@ -59,8 +60,8 @@ public class windows_start extends JFrame implements ActionListener{
         return labelTitle;
     }
 
-    private JTextField createTextField() 
-    {
+    // เมธอดสำหรับสร้างช่องกรอกข้อมูลจำนวนอุกกาบาต
+    private JTextField createTextField() {
         JTextField textField = new JTextField("5");
         textField.setMaximumSize(new Dimension(100, 30));
         textField.setFont(new Font("Tahoma", Font.PLAIN, 16));
@@ -71,9 +72,8 @@ public class windows_start extends JFrame implements ActionListener{
         textField.addKeyListener(new KeyAdapter() {
             @Override
             public void keyTyped(KeyEvent e) {
-                    //เมื่อกดปุ่ม Enter ให้ทำการกดปุ่ม Start
-                if (e.getKeyChar() == KeyEvent.VK_ENTER) 
-                {
+                // เมื่อกดปุ่ม Enter ให้ทำงานเสมือนการกดปุ่ม Start
+                if (e.getKeyChar() == KeyEvent.VK_ENTER) {
                     buttonStart.doClick();
                 }
             }
@@ -81,8 +81,8 @@ public class windows_start extends JFrame implements ActionListener{
         return textField;
     }
 
-    private JButton createButtonStart() 
-    {
+    // เมธอดสำหรับสร้างปุ่ม Start เพื่อเริ่มเกม
+    private JButton createButtonStart() {
         JButton buttonStart = new JButton("Start");
         buttonStart.setFont(new Font("Tahoma", Font.PLAIN, 16));
         buttonStart.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -95,15 +95,14 @@ public class windows_start extends JFrame implements ActionListener{
         return buttonStart;
     }
 
-    private void setIcon()
-    {
+    // เมธอดสำหรับตั้งค่าไอคอนของหน้าต่าง
+    private void setIcon() {
         ImageIcon icon = new ImageIcon("texture/icon.png");
         setIconImage(icon.getImage());
     }
 
-    public void actionPerformed (ActionEvent e) 
-    {
-        
+    // เมธอดจัดการเหตุการณ์เมื่อมีการกดปุ่ม Start ตรวจสอบความถูกต้องของตัวเลขและเริ่มเกม
+    public void actionPerformed(ActionEvent e) {
         int count = 0;
         try {
             count = Integer.parseInt(textField.getText());
@@ -115,8 +114,10 @@ public class windows_start extends JFrame implements ActionListener{
             JOptionPane.showMessageDialog(this, "Please enter a valid integer.", "Invalid Input", JOptionPane.ERROR_MESSAGE);
             return;
         }
+        
+        // ปิดหน้าต่างเริ่มต้น
         this.dispose();
+        // เปิดหน้าต่างเกมหลักพร้อมส่งจำนวนอุกกาบาตเข้าไป
         new windows_game(count);
     }
-
 }

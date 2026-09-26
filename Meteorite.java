@@ -16,6 +16,7 @@ public class Meteorite implements Runnable {
     private BouncingMeteorite panel;
     private Thread thread;
 
+    // คอนสตรักเตอร์: กำหนดค่าเริ่มต้นพิกัด ความเร็ว รูปภาพ และพาเนลเกมสำหรับอุกกาบาต
     public Meteorite(double x, double y, double xSpeed, double ySpeed, BufferedImage image, int meteoriteWidth, int meteoriteHeight, BufferedImage explosionImage, BouncingMeteorite panel) {
         this.x = x;
         this.y = y;
@@ -28,11 +29,13 @@ public class Meteorite implements Runnable {
         this.panel = panel;
     }
 
+    // เมธอดสำหรับเริ่มการทำงานของ Thread ประจำตัวอุกกาบาตลูกนี้
     public void startThread() {
         thread = new Thread(this);
         thread.start();
     }
 
+    // เมธอดทำงานของ Thread: ลูปอัพเดทตำแหน่งเรื่อยๆ จนกว่าอุกกาบาตจะถูกทำลาย
     @Override
     public void run() {
         while (!isDead) {
@@ -45,6 +48,7 @@ public class Meteorite implements Runnable {
         }
     }
 
+    // เมธอดสั่งให้อุกกาบาตระเบิด: เปลี่ยนสถานะและหยุดการเคลื่อนที่
     public void explode() {
         if (!isExploding) {
             isExploding = true;
@@ -53,7 +57,9 @@ public class Meteorite implements Runnable {
         }
     }
 
+    // เมธอดอัพเดทตำแหน่ง: คำนวณพิกัด x, y ตรวจสอบการชนขอบจอเพื่อเด้งกลับและเพิ่มความเร็ว
     public void update(int panelWidth, int panelHeight) {
+        // หากอยู่ในสถานะระเบิด ให้นับเวลาถอยหลังจนกว่าจะตาย (หายไป)
         if (isExploding) {
             explosionTimer++;
             if (explosionTimer >= 180) {
@@ -66,6 +72,7 @@ public class Meteorite implements Runnable {
         x += xSpeed;
         y += ySpeed;
 
+        // ตรวจสอบการชนขอบซ้ายหรือขวา
         if (x <= 0) {
             x = 0;
             xSpeed = -xSpeed * 1.05;
@@ -74,6 +81,7 @@ public class Meteorite implements Runnable {
             xSpeed = -xSpeed * 1.05;
         }
 
+        // ตรวจสอบการชนขอบบนหรือล่าง
         if (y <= 0) {
             y = 0;
             ySpeed = -ySpeed * 1.05;
@@ -82,12 +90,14 @@ public class Meteorite implements Runnable {
             ySpeed = -ySpeed * 1.05;
         }
 
+        // จำกัดความเร็วสูงสุดแนวแกน X
         if (xSpeed > MAX_SPEED) {
             xSpeed = MAX_SPEED;
         } else if (xSpeed < -MAX_SPEED) {
             xSpeed = -MAX_SPEED;
         }
 
+        // จำกัดความเร็วสูงสุดแนวแกน Y
         if (ySpeed > MAX_SPEED) {
             ySpeed = MAX_SPEED;
         } else if (ySpeed < -MAX_SPEED) {
@@ -95,6 +105,7 @@ public class Meteorite implements Runnable {
         }
     }
 
+    // เมธอดวาดอุกกาบาต: วาดรูประเบิดหรือรูปอุกกาบาตปกติลงบนหน้าจอ
     public void draw(Graphics g) {
         BufferedImage currentImg;
         if (isExploding) {
