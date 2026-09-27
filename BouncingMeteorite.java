@@ -73,20 +73,13 @@ public class BouncingMeteorite extends JPanel {
 
     // เมธอดตรวจสอบการชน: ลบลูกที่ตายแล้ว และเช็คการชนกันระหว่างอุกกาบาตแต่ละคู่
     public void checkCollisions() {
-        for (int i = meteorites.size() - 1; i >= 0; i--) {
-            Meteorite m = meteorites.get(i);
-            if (m.isDead) {
-                meteorites.remove(i);
-            }
-        }
-
         for (int i = 0; i < meteorites.size(); i++) {
             for (int j = i + 1; j < meteorites.size(); j++) {
                 Meteorite m1 = meteorites.get(i);
                 Meteorite m2 = meteorites.get(j);
 
-                // ข้ามการเช็คถ้าลูกใดลูกหนึ่งกำลังระเบิดอยู่
-                if (m1.isExploding || m2.isExploding) {
+                // ข้ามการเช็คถ้าลูกใดลูกหนึ่งตายหรือกำลังระเบิดอยู่
+                if (m1.isDead || m2.isDead || m1.isExploding || m2.isExploding) {
                     continue;
                 }
 
@@ -143,7 +136,9 @@ public class BouncingMeteorite extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         for (Meteorite m : meteorites) {
-            m.draw(g);
+            if (!m.isDead) {
+                m.draw(g);
+            }
         }
     }
 }

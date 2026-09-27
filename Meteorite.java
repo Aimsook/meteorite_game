@@ -39,6 +39,8 @@ public class Meteorite implements Runnable {
     public void run() {
         while (!isDead) {
             update(panel.getWidth(), panel.getHeight());
+            panel.checkCollisions();
+            panel.repaint();
             try {
                 Thread.sleep(16);
             } catch (InterruptedException e) {
