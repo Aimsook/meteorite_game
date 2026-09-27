@@ -16,7 +16,8 @@ public class BouncingMeteorite extends JPanel {
 
     private List<Meteorite> meteorites = new ArrayList<>();
 
-    // คอนสตรักเตอร์: ตั้งค่าหน้าจอและสร้างอุกกาบาตตามจำนวนที่ผู้ใช้กำหนด พร้อมสุ่มตำแหน่งและความเร็ว
+    // คอนสตรักเตอร์: ตั้งค่าหน้าจอและสร้างอุกกาบาตตามจำนวนที่ผู้ใช้กำหนด
+    // พร้อมสุ่มตำแหน่งและความเร็ว
     public BouncingMeteorite(int numMeteorites) {
         this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
         this.setBackground(Color.BLACK);
@@ -27,23 +28,42 @@ public class BouncingMeteorite extends JPanel {
             double x = rand.nextInt(WIDTH - Meteorite_WIDTH);
             double y = rand.nextInt(HEIGHT - Meteorite_HEIGHT);
 
-            double xSpeed = 2.0 + rand.nextDouble() * 3.0;
-            double ySpeed = 2.0 + rand.nextDouble() * 3.0;
+            double speedX = 2.0 + rand.nextDouble() * 3.0;
+            double speedY = 2.0 + rand.nextDouble() * 3.0;
 
-            if (rand.nextBoolean()) {
-                xSpeed = xSpeed;
+            double xSpeed;
+            double ySpeed;
+
+            // สุ่มทิศทางการเคลื่อนที่: แนวนอน, แนวตั้ง, หรือแนวทแยง
+            int direction = rand.nextInt(3);
+
+            if (direction == 0) {
+                // แนวนอน
+                xSpeed = speedX;
+                ySpeed = 0;
+            } else if (direction == 1) {
+                // แนวตั้ง
+                xSpeed = 0;
+                ySpeed = speedY;
             } else {
+                // แนวทแยง
+                xSpeed = speedX;
+                ySpeed = speedY;
+            }
+
+            // สุ่มทิศทางซ้าย/ขวา
+            if (xSpeed != 0 && rand.nextBoolean()) {
                 xSpeed = -xSpeed;
             }
 
-            if (rand.nextBoolean()) {
-                ySpeed = ySpeed;
-            } else {
+            // สุ่มทิศทางขึ้น/ลง
+            if (ySpeed != 0 && rand.nextBoolean()) {
                 ySpeed = -ySpeed;
             }
 
             Image image = IMAGES[rand.nextInt(IMAGES.length)];
-            meteorites.add(new Meteorite(x, y, xSpeed, ySpeed, image, Meteorite_WIDTH, Meteorite_HEIGHT, EXPLOSION_IMAGE, this));
+            meteorites.add(new Meteorite(x, y, xSpeed, ySpeed, image, Meteorite_WIDTH, Meteorite_HEIGHT,
+                    EXPLOSION_IMAGE, this));
         }
     }
 
@@ -59,16 +79,16 @@ public class BouncingMeteorite extends JPanel {
     private static Image[] loadImages() {
         Image[] images = new Image[5];
         for (int i = 0; i < 5; i++) {
-            images[i] = Toolkit.getDefaultToolkit().createImage(System.getProperty("user.dir") + 
-                        File.separator + "texture"+  File.separator + "meteorite_" + (i + 1) + ".png");
+            images[i] = Toolkit.getDefaultToolkit().createImage(System.getProperty("user.dir") +
+                    File.separator + "texture" + File.separator + "meteorite_" + (i + 1) + ".png");
         }
         return images;
     }
 
     // เมธอดโหลดรูปภาพ: โหลดไฟล์รูปภาพเอฟเฟกต์ระเบิด
     private static Image loadExplosionImage() {
-        return Toolkit.getDefaultToolkit().createImage(System.getProperty("user.dir") + 
-               File.separator + "texture"+  File.separator + "explosion.png");
+        return Toolkit.getDefaultToolkit().createImage(System.getProperty("user.dir") +
+                File.separator + "texture" + File.separator + "explosion.png");
     }
 
     // เมธอดตรวจสอบการชน: ลบลูกที่ตายแล้ว และเช็คการชนกันระหว่างอุกกาบาตแต่ละคู่
@@ -93,9 +113,9 @@ public class BouncingMeteorite extends JPanel {
     // เมธอดตรวจสอบกรอบการชน: เช็คว่าภาพอุกกาบาต 2 ลูกซ้อนทับกันหรือไม่
     private boolean checkCollision(Meteorite m1, Meteorite m2) {
         return m1.x < m2.x + Meteorite_WIDTH &&
-            m1.x + Meteorite_WIDTH > m2.x &&
-            m1.y < m2.y + Meteorite_HEIGHT &&
-            m1.y + Meteorite_HEIGHT > m2.y;
+                m1.x + Meteorite_WIDTH > m2.x &&
+                m1.y < m2.y + Meteorite_HEIGHT &&
+                m1.y + Meteorite_HEIGHT > m2.y;
     }
 
     // เมธอดจัดการเมื่อชนกัน: เปรียบเทียบความเร็วรวม ลูกที่ช้ากว่าจะถูกทำให้ระเบิด
@@ -128,6 +148,9 @@ public class BouncingMeteorite extends JPanel {
             m2.explode();
         } else if (m1_real_speed < m2_real_speed) {
             m1.explode();
+        } else {
+            m1.explode();
+            m2.explode();
         }
     }
 
